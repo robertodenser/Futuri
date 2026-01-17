@@ -55,6 +55,16 @@
 <script>
   alert("JavaScript está rodando");
 </script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<script>
+  if (window.supabase) {
+    alert("Supabase conectado com sucesso");
+  } else {
+    alert("Supabase NÃO conectado");
+  }
+</script>
 
   </body>
 </html>
