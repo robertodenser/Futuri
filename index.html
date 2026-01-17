@@ -118,5 +118,22 @@
         }
       };
     </script>
+<script>
+  async function checkSession() {
+    const { data } = await supabaseClient.auth.getSession();
+
+    if (data.session) {
+      document.querySelector(".card").innerHTML = `
+        <h1>Futuri</h1>
+        <p>Login realizado com sucesso 💚</p>
+        <p><strong>${data.session.user.email}</strong></p>
+        <p><em>Em breve você poderá criar o Futuro de uma criança.</em></p>
+      `;
+    }
+  }
+
+  checkSession();
+</script>
+
   </body>
 </html>
