@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Futuri</title>
+
     <style>
       body {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -15,56 +16,111 @@
         margin: 0;
         color: #111;
       }
+
       .card {
         background: white;
         padding: 2rem;
         border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         text-align: center;
         max-width: 400px;
+        width: 100%;
       }
+
       h1 {
         margin-bottom: 0.5rem;
       }
+
       p {
         color: #555;
       }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: none;
+        background: #16a34a;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #15803d;
+      }
+
+      #status {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
     </style>
   </head>
+
   <body>
     <div class="card">
       <h1>Futuri</h1>
       <p>Um jeito simples de cuidar do futuro de quem você ama.</p>
-      <p><em>Em construção 💚</em></p>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Digite seu email"
+      />
+
+      <button id="loginBtn">Entrar</button>
+
+      <div id="status"></div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  const SUPABASE_URL = "https://hvaagvdfxgkvdviitxjk.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_C5rJCEw_shXUnM8uN8BdrA_6p_crxgw";
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  const supabase = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-</script>
-<script src="supabase.js"></script>
-<script>
-  console.log("Supabase client:", window.supabase);
-</script>
-<script>
-  alert("JavaScript está rodando");
-</script>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
+    <!-- Supabase client -->
+    <script>
+      const SUPABASE_URL = "https://hvaagvdfxgkvdviitxjk.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_C5rJCEw_shXUnM8uN8BdrA_6p_crxgw";
 
-<script>
-  if (window.supabase) {
-    alert("Supabase conectado com sucesso");
-  } else {
-    alert("Supabase NÃO conectado");
-  }
-</script>
+      const supabase = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+    </script>
 
+    <!-- Login logic -->
+    <script>
+      const loginBtn = document.getElementById("loginBtn");
+      const status = document.getElementById("status");
+
+      loginBtn.onclick = async () => {
+        const email = document.getElementById("email").value;
+
+        if (!email) {
+          status.innerText = "Digite um email válido.";
+          return;
+        }
+
+        const { error } = await supabase.auth.signInWithOtp({
+          email: email
+        });
+
+        if (error) {
+          status.innerText = error.message;
+        } else {
+          status.innerText =
+            "Enviamos um link mágico para seu email. ✉️";
+        }
+      };
+    </script>
   </body>
 </html>
