@@ -27,14 +27,6 @@
         width: 100%;
       }
 
-      h1 {
-        margin-bottom: 0.5rem;
-      }
-
-      p {
-        color: #555;
-      }
-
       input {
         width: 100%;
         padding: 0.75rem;
@@ -56,8 +48,9 @@
         cursor: pointer;
       }
 
-      button:hover {
-        background: #15803d;
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
       }
 
       #status {
@@ -84,44 +77,46 @@
     </div>
 
     <!-- Supabase SDK -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<script>
-  const SUPABASE_URL = "https://hvaagvdfxgkvdviitxjk.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_C5rJCEw_shXUnM8uN8BdrA_6p_crxgw";
+    <script>
+      const SUPABASE_URL = "https://hvaagvdfxgkvdviitxjk.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_C5rJCEw_shXUnM8uN8BdrA_6p_crxgw";
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-</script>
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
 
-<script>
-  const loginBtn = document.getElementById("loginBtn");
-  const status = document.getElementById("status");
+      const loginBtn = document.getElementById("loginBtn");
+      const status = document.getElementById("status");
 
-  loginBtn.onclick = async () => {
-    const email = document.getElementById("email").value;
+      loginBtn.onclick = async () => {
+        const email = document.getElementById("email").value.trim();
 
-    if (!email) {
-      status.innerText = "Digite um email válido.";
-      return;
-    }
+        if (!email) {
+          status.innerText = "Digite um email válido.";
+          return;
+        }
 
-    status.innerText = "Enviando link mágico...";
+        loginBtn.disabled = true;
+        status.innerText = "Enviando link mágico...";
 
-    const { error } = await supabaseClient.auth.signInWithOtp({
-      email: email
-    });
+        const { error } = await supabaseClient.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: "https://robertodenser.github.io/Futuri/"
+          }
+        });
 
-    if (error) {
-      status.innerText = error.message;
-    } else {
-      status.innerText =
-        "Enviamos um link mágico para seu email ✉️";
-    }
-  };
-</script>
-
+        if (error) {
+          status.innerText = "Erro: " + error.message;
+          loginBtn.disabled = false;
+        } else {
+          status.innerText =
+            "Enviamos um link mágico para seu email ✉️";
+        }
+      };
+    </script>
   </body>
 </html>
