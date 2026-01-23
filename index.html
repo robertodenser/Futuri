@@ -134,6 +134,28 @@
 
   checkSession();
 </script>
+<script>
+  async function initApp() {
+    const { data } = await supabaseClient.auth.getSession();
+
+    if (data.session) {
+      document.querySelector(".card").innerHTML = `
+        <h1>Futuri</h1>
+        <p>Bem-vindo ao Futuri 💚</p>
+        <p><strong>${data.session.user.email}</strong></p>
+
+        <button id="logoutBtn">Sair</button>
+      `;
+
+      document.getElementById("logoutBtn").onclick = async () => {
+        await supabaseClient.auth.signOut();
+        location.reload();
+      };
+    }
+  }
+
+  initApp();
+</script>
 
   </body>
 </html>
